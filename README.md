@@ -1,4 +1,6 @@
 # Spackl
+[![PyPI version](https://img.shields.io/pypi/v/spackl.svg)](https://pypi.org/project/spackl/) [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/spackl.svg)](https://pypi.org/project/spackl/) [![CircleCI](https://circleci.com/gh/aaronbiller/spackl/tree/master.svg?style=shield)](https://circleci.com/gh/aaronbiller/spackl/tree/master) [![Coverage Status](https://coveralls.io/repos/github/aaronbiller/spackl/badge.svg?branch=master)](https://coveralls.io/github/aaronbiller/spackl?branch=master)
+
 Abstracting data source idiosyncrasies so you can stop reading Q&A forums and start reading your data.
 
 ## Installation
