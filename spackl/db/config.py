@@ -7,11 +7,20 @@ import re
 import yaml
 
 from spackl.util import Path
+from . import (
+    BigQuery,
+    Postgres,
+    Redshift)
 
 _log = logging.getLogger(__name__)
 
 
 DEFAULT_CONFIG_FILE = Path('~/.spackl/config.yaml').expanduser()
+DB_TYPE_MAP = {
+    'bigquery': BigQuery,
+    'postgres': Postgres,
+    'redshift': Redshift
+}
 
 
 class Config(object):
@@ -139,3 +148,11 @@ class Config(object):
                 cleaned_name = cleaned_name[:-1] + str(i)
 
         return cleaned_name
+
+    def get_db(self, name):
+        for c in self._dbs:
+            if c['name'] == name:
+                dbtype = c.get('type', 'postgres')
+                db = DB_TYPE_MAP.get(dbtype, Postgres)
+                return db(**c)
+        raise ValueError('DB with name "{}" not found.'.format(name))
