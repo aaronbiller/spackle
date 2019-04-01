@@ -55,6 +55,21 @@ class BaseFile(ABC):
                 kwargs : Arbitrary parameters to pass to the query method
 
             Returns:
-                IOResult containing the file data
+                FileResult containing the file data
+        """
+        raise NotImplementedError()
+
+    @abstractmethod
+    def query_df(self, **kwargs):
+        """
+            Reads the open file object
+
+            If not open, should call self.open() first
+
+            Kwargs:
+                kwargs : Arbitrary parameters to pass to the query method
+
+            Returns:
+                pandas DataFrame
         """
         raise NotImplementedError()

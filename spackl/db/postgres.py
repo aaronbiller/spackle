@@ -66,3 +66,10 @@ class Postgres(BaseDb):
         with self._conn.begin():
             self._query(query_string, **kwargs)
         self.close()
+
+    def query_df(self, query_string, **kwargs):
+        from pandas import read_sql
+        self.connect()
+        df = read_sql(query_string, self._conn, **kwargs)
+        self.close()
+        return df
