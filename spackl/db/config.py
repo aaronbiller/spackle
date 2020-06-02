@@ -43,7 +43,6 @@ class Config(object):
             config_file : str - The path of the config file to load
 
         TODO(aaronbiller): allow config to create config file and write to it
-        TODO(aaronbiller): allow instantiation of BaseDb right from the config
     """
     _config = None
     _dbs = list()

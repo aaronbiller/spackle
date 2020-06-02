@@ -74,18 +74,22 @@ class BigQuery(BaseDb):
         """
         return
 
-    def _query(self, query_string):
+    def _query(self, query_string, **kwargs):
         self.connect()
-        query_job = self._conn.query(query_string)
+        query_job = self._conn.query(query_string, **kwargs)
         return query_job.result()
 
-    def query(self, query_string):
+    def query(self, query_string, **kwargs):
         from .result import QueryResult
         result = self._query(query_string)
         return QueryResult(result)
 
-    def execute(self, query_string):
-        self._query(query_string)
+    def execute(self, query_string, **kwargs):
+        self._query(query_string, **kwargs)
+
+    def query_df(self, query_string, **kwargs):
+        result = self._query(query_string, **kwargs)
+        return result.to_dataframe()
 
     def list_tables(self, dataset_id):
         """

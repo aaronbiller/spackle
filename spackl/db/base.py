@@ -97,3 +97,21 @@ class BaseDb(ABC):
                 None
         """
         raise NotImplementedError()
+
+    @abstractmethod
+    def query_df(self, query_string, **kwargs):
+        """
+            Runs a query against the source database and returns a pandas DataFrame
+
+            If not connected, should call self.connect() first
+
+            Args:
+                query_string : str - The query to run against the database
+
+            Kwargs:
+                kwargs : Arbitrary parameters to pass to the query engine
+
+            Returns:
+                pandas DataFrame
+        """
+        raise NotImplementedError()

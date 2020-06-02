@@ -23,14 +23,10 @@ class CSV(BaseFile):
                                                   that can be opened, read, and closed
         Kwargs:
             name : str - The canonical name to use for this instance
-            use_pandas : bool - Choose to use pandas to read the csv file, a better option if you plan
-                                to ultimately convert the result to a DataFrame.
-                                NOTE: This causes the query method to return a DataFrame instead of a FileResult
             csv_kwargs : Parameters to pass to the csv reader (fieldnames, delimiter, dialect, etc)
     """
-    def __init__(self, file_path_or_obj, name=None, use_pandas=False, **csv_kwargs):
+    def __init__(self, file_path_or_obj, name=None, **csv_kwargs):
         self._name = name
-        self._use_pandas = use_pandas
 
         self._file = None
         self._csv_kwargs = dict(**csv_kwargs)
@@ -60,7 +56,7 @@ class CSV(BaseFile):
                 _log.warning('Provided path does not exist : %s', file_path_or_obj)
                 file = None
             else:
-                if zipfile.is_zipfile(str(file)) and not self._use_pandas:
+                if zipfile.is_zipfile(str(file)):
                     file = zipfile.ZipFile(str(file))
         self._file = file
 
@@ -90,15 +86,7 @@ class CSV(BaseFile):
         self._data.seek(0)
         return dialect
 
-    def _load_using_pandas(self, **kwargs):
-        from pandas import read_csv
-        return read_csv(self._file, **kwargs)
-
-    def query(self, use_pandas=False, pd_kwargs=dict(), **kwargs):
-        if use_pandas or self._use_pandas:
-            # Skip loading method and return a dataframe
-            return self._load_using_pandas(**pd_kwargs)
-
+    def query(self, **kwargs):
         _kwargs = dict(**self._csv_kwargs)
         _kwargs.update(**kwargs)
 
@@ -112,3 +100,8 @@ class CSV(BaseFile):
         self.close()
 
         return result
+
+    def query_df(self, **kwargs):
+        from pandas import read_csv
+        fp = self._file.filename if isinstance(self._file, zipfile.ZipFile) else self._file
+        return read_csv(fp, **kwargs)
